@@ -21,7 +21,15 @@ var activePin;
 for (var j = 0; j < pins.length; j++) {
   if (firstSelectedPin === pins[j]) {
     activePin = j;
+    break;
   }
+}
+
+// Если нет активного маркера - скрыть поле
+// с информацией
+
+if (isNaN(activePin)) {
+  dialog.style.display = 'none';
 }
 
 // Функция для использования в событии клика по маркерам
@@ -30,13 +38,11 @@ for (var j = 0; j < pins.length; j++) {
 
 var clickPin = function (numPin) {
   pins[numPin].addEventListener('click', function () {
+    if (!isNaN(activePin)) {
+      pins[activePin].classList.remove('pin--active');
+    }
     pins[numPin].classList.add('pin--active');
     activePin = numPin;
-    for (var i = 0; i < pins.length; i++) {
-      if (i !== numPin) {
-        pins[i].classList.remove('pin--active');
-      }
-    }
     dialog.style.display = 'block';
   });
 };
