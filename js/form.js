@@ -11,63 +11,58 @@ var fieldPropertyType = document.querySelector('#type');
 var fieldRoomNumber = document.querySelector('#room_number');
 var fieldCapacity = document.querySelector('#capacity');
 
+// Если при открытии окна уже выделен один из маркеров
+// и открыто окно с информацией - назначить это окно
+// переменной activePin для возможности его закрыть
+
+var firstSelectedPin = document.querySelector('.pin--active');
+var activePin;
+
+for (var j = 0; j < pins.length; j++) {
+  if (firstSelectedPin === pins[j]) {
+    activePin = j;
+  }
+}
+
 // Функция для использования в событии клика по маркерам
 // с фотографиями. Делает активным нажатый маркер
 // и отображает поле с информацией.
 
 var clickPin = function (numPin) {
-  pins[numPin].classList.add('pin--active');
-  for (var i = 0; i < pins.length; i++) {
-    if (i !== numPin) {
-      pins[i].classList.remove('pin--active');
+  pins[numPin].addEventListener('click', function () {
+    pins[numPin].classList.add('pin--active');
+    activePin = numPin;
+    for (var i = 0; i < pins.length; i++) {
+      if (i !== numPin) {
+        pins[i].classList.remove('pin--active');
+      }
     }
-  }
-  dialog.style.display = 'block';
+    dialog.style.display = 'block';
+  });
 };
+
+for (var i = 0; i < pins.length; i++) {
+  clickPin(i);
+}
+
+// Событие для закрытия окна с информацией о сдаваемой площади:
+// скрывается само окно информации и удаляется класс активности
+// с маркера на карте.
+
+var clickClose = function () {
+  pins[activePin].classList.remove('pin--active');
+  dialog.style.display = 'none';
+};
+
+dialogClose.addEventListener('click', clickClose);
 
 // Функция для использования в событиях полей
 // "время выезда" - "время заезда". Связывает
 // изменение одного поля с другим.
 
 var changeTimesFields = function (fieldFirst, fieldSecond) {
-  switch (fieldFirst.value) {
-    case '12':
-      fieldSecond.value = '12';
-      break;
-    case '13':
-      fieldSecond.value = '13';
-      break;
-    case '14':
-      fieldSecond.value = '14';
-  }
+  fieldSecond.value = fieldFirst.value;
 };
-
-pins[0].addEventListener('click', function () {
-  clickPin(0);
-});
-
-pins[1].addEventListener('click', function () {
-  clickPin(1);
-});
-
-pins[2].addEventListener('click', function () {
-  clickPin(2);
-});
-
-pins[3].addEventListener('click', function () {
-  clickPin(3);
-});
-
-// По кнопке закрытия окна с информацией о сдаваемой площади
-// скрывается само окно информации и удаляется класс активности
-// с маркера на карте.
-
-dialogClose.addEventListener('click', function () {
-  dialog.style.display = 'none';
-  for (var i = 0; i < pins.length; i++) {
-    pins[i].classList.remove('pin--active');
-  }
-});
 
 fieldTitle.required = true;
 fieldTitle.minLength = 30;
@@ -101,21 +96,9 @@ fieldPropertyType.addEventListener('change', function () {
 fieldCapacity.value = '0';
 
 fieldRoomNumber.addEventListener('change', function functionName() {
-  switch (fieldRoomNumber.value) {
-    case '1':
-      fieldCapacity.value = '0';
-      break;
-    default:
-      fieldCapacity.value = '3';
-  }
+  fieldCapacity.value = (fieldRoomNumber.value === '1') ? '0' : '3';
 });
 
 fieldCapacity.addEventListener('change', function () {
-  switch (fieldCapacity.value) {
-    case '0':
-      fieldRoomNumber.value = '1';
-      break;
-    default:
-      fieldRoomNumber.value = '2';
-  }
+  fieldRoomNumber.value = (fieldCapacity.value === '0') ? '1' : '2';
 });
