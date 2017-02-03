@@ -12,20 +12,33 @@ var fieldRoomNumber = document.querySelector('#room_number');
 var fieldCapacity = document.querySelector('#capacity');
 
 var ENTER_KEY_CODE = 13;
+var ESCAPE_KEY_CODE = 27;
 
 var isActivateEvent = function (evt) {
   return evt.keyCode && evt.keyCode === ENTER_KEY_CODE;
 };
 
+var isEscapeEvent = function (evt) {
+  return evt.keyCode && evt.keyCode === ESCAPE_KEY_CODE;
+};
+
+var pressEscBtn = function (evt) {
+  if (isEscapeEvent(evt)) {
+    hideDialog(evt);
+  }
+};
+
 // Если нет активного маркера - скрыть поле с информацией
+// иначе - добавить возможность скрыть по нажатию escape
 
 var activePin = document.querySelector('.pin--active');
 if (!isNaN(activePin)) {
   dialog.style.display = 'none';
+} else {
+  document.addEventListener('keydown', pressEscBtn);
 }
 
 var deactivatePin = function () {
-  activePin = document.querySelector('.pin--active');
   if (activePin) {
     activePin.setAttribute('aria-pressed', 'false');
     activePin.classList.remove('pin--active');
@@ -37,9 +50,11 @@ var pressPin = function (evt) {
   var element = target.classList.contains('pin') ? target : target.parentElement;
   deactivatePin();
   element.classList.add('pin--active');
+  activePin = element;
   element.setAttribute('aria-pressed', 'true');
   dialogClose.setAttribute('aria-pressed', 'false');
   dialog.style.display = 'block';
+  document.addEventListener('keydown', pressEscBtn);
 };
 
 pinMap.addEventListener('click', pressPin);
@@ -53,6 +68,7 @@ var hideDialog = function (evt) {
   deactivatePin();
   dialogClose.setAttribute('aria-pressed', 'true');
   dialog.style.display = 'none';
+  document.removeEventListener('keydown', pressEscBtn);
 };
 
 dialogClose.addEventListener('click', hideDialog);
