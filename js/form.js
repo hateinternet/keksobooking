@@ -32,7 +32,7 @@ var pressEscBtn = function (evt) {
 // иначе - добавить возможность скрыть по нажатию escape
 
 var activePin = document.querySelector('.pin--active');
-if (!isNaN(activePin)) {
+if (!activePin) {
   dialog.style.display = 'none';
 } else {
   document.addEventListener('keydown', pressEscBtn);
@@ -42,19 +42,21 @@ var deactivatePin = function () {
   if (activePin) {
     activePin.setAttribute('aria-pressed', 'false');
     activePin.classList.remove('pin--active');
+    activePin = null;
   }
 };
 
 var pressPin = function (evt) {
-  var target = evt.target;
-  var element = target.classList.contains('pin') ? target : target.parentElement;
-  deactivatePin();
-  element.classList.add('pin--active');
-  activePin = element;
-  element.setAttribute('aria-pressed', 'true');
-  dialogClose.setAttribute('aria-pressed', 'false');
-  dialog.style.display = 'block';
-  document.addEventListener('keydown', pressEscBtn);
+  var element = evt.target.classList.contains('pin') ? evt.target : evt.target.parentElement;
+  if (element !== activePin) {
+    deactivatePin();
+    element.classList.add('pin--active');
+    activePin = element;
+    element.setAttribute('aria-pressed', 'true');
+    dialogClose.setAttribute('aria-pressed', 'false');
+    dialog.style.display = 'block';
+    document.addEventListener('keydown', pressEscBtn);
+  }
 };
 
 pinMap.addEventListener('click', pressPin);
