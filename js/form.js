@@ -1,5 +1,5 @@
 'use strict';
-var pins = document.querySelectorAll('.pin');
+var pinMap = document.querySelector('.tokyo__pin-map');
 var dialog = document.querySelector('.dialog');
 var dialogClose = dialog.querySelector('.dialog__close');
 var fieldTitle = document.querySelector('#title');
@@ -11,56 +11,74 @@ var fieldPropertyType = document.querySelector('#type');
 var fieldRoomNumber = document.querySelector('#room_number');
 var fieldCapacity = document.querySelector('#capacity');
 
-// Если при открытии окна уже выделен один из маркеров
-// и открыто окно с информацией - назначить это окно
-// переменной activePin для возможности его закрыть
+var ENTER_KEY_CODE = 13;
+var ESCAPE_KEY_CODE = 27;
 
-var firstSelectedPin = document.querySelector('.pin--active');
-var activePin;
+var isActivateEvent = function (evt) {
+  return evt.keyCode && evt.keyCode === ENTER_KEY_CODE;
+};
 
-for (var j = 0; j < pins.length; j++) {
-  if (firstSelectedPin === pins[j]) {
-    activePin = j;
-    break;
+var isEscapeEvent = function (evt) {
+  return evt.keyCode && evt.keyCode === ESCAPE_KEY_CODE;
+};
+
+var pressEscBtn = function (evt) {
+  if (isEscapeEvent(evt)) {
+    hideDialog(evt);
   }
-}
+};
 
-// Если нет активного маркера - скрыть поле
-// с информацией
+// Если нет активного маркера - скрыть поле с информацией
+// иначе - добавить возможность скрыть по нажатию escape
 
-if (isNaN(activePin)) {
+var activePin = document.querySelector('.pin--active');
+if (!activePin) {
   dialog.style.display = 'none';
+} else {
+  document.addEventListener('keydown', pressEscBtn);
 }
 
-// Функция для использования в событии клика по маркерам
-// с фотографиями. Делает активным нажатый маркер
-// и отображает поле с информацией.
+var deactivatePin = function () {
+  if (activePin) {
+    activePin.setAttribute('aria-pressed', 'false');
+    activePin.classList.remove('pin--active');
+    activePin = null;
+  }
+};
 
-var clickPin = function (numPin) {
-  pins[numPin].addEventListener('click', function () {
-    if (!isNaN(activePin)) {
-      pins[activePin].classList.remove('pin--active');
-    }
-    pins[numPin].classList.add('pin--active');
-    activePin = numPin;
+var pressPin = function (evt) {
+  var element = evt.target.classList.contains('pin') ? evt.target : evt.target.parentElement;
+  if (element !== activePin) {
+    deactivatePin();
+    element.classList.add('pin--active');
+    activePin = element;
+    element.setAttribute('aria-pressed', 'true');
+    dialogClose.setAttribute('aria-pressed', 'false');
     dialog.style.display = 'block';
-  });
+    document.addEventListener('keydown', pressEscBtn);
+  }
 };
 
-for (var i = 0; i < pins.length; i++) {
-  clickPin(i);
-}
+pinMap.addEventListener('click', pressPin);
+pinMap.addEventListener('keydown', function (evt) {
+  if (isActivateEvent(evt)) {
+    pressPin(evt);
+  }
+});
 
-// Событие для закрытия окна с информацией о сдаваемой площади:
-// скрывается само окно информации и удаляется класс активности
-// с маркера на карте.
-
-var clickClose = function () {
-  pins[activePin].classList.remove('pin--active');
+var hideDialog = function (evt) {
+  deactivatePin();
+  dialogClose.setAttribute('aria-pressed', 'true');
   dialog.style.display = 'none';
+  document.removeEventListener('keydown', pressEscBtn);
 };
 
-dialogClose.addEventListener('click', clickClose);
+dialogClose.addEventListener('click', hideDialog);
+dialogClose.addEventListener('keydown', function (evt) {
+  if (isActivateEvent(evt)) {
+    hideDialog(evt);
+  }
+});
 
 // Функция для использования в событиях полей
 // "время выезда" - "время заезда". Связывает
