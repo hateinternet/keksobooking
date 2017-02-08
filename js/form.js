@@ -36,36 +36,3 @@ fieldCapacity.value = '0';
 window.synchronizeFields(fieldTime, fieldTimeOut, timeValues, timeOutValues, 'value');
 window.synchronizeFields(fieldRealtyType, fieldPrice, realtyTypeValues, realtyPriceValues, 'min');
 window.synchronizeFields(fieldRoomNumber, fieldCapacity, roomNumberValues, capacityValues, 'value');
-//
-// var changeTimesFields = function (fieldFirst, fieldSecond) {
-//   fieldSecond.value = fieldFirst.value;
-// };
-//
-// fieldTime.addEventListener('change', function () {
-//   changeTimesFields(fieldTime, fieldTimeOut);
-// });
-//
-// fieldTimeOut.addEventListener('change', function () {
-//   changeTimesFields(fieldTimeOut, fieldTime);
-// });
-//
-// fieldRealtyType.addEventListener('change', function () {
-//   switch (fieldRealtyType.value) {
-//     case 'apartment':
-//       fieldPrice.min = 1000;
-//       break;
-//     case 'shack':
-//       fieldPrice.min = 0;
-//       break;
-//     case 'palace':
-//       fieldPrice.min = 10000;
-//   }
-// });
-//
-// fieldRoomNumber.addEventListener('change', function functionName() {
-//   fieldCapacity.value = (fieldRoomNumber.value === '1') ? '0' : '3';
-// });
-//
-// fieldCapacity.addEventListener('change', function () {
-//   fieldRoomNumber.value = (fieldCapacity.value === '0') ? '1' : '2';
-// });
