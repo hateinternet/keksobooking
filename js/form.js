@@ -14,10 +14,6 @@ fieldPrice.min = 1000;
 fieldPrice.max = 1000000;
 fieldAddress.required = true;
 
-// Функция для использования в событиях полей
-// "время выезда" - "время заезда". Связывает
-// изменение одного поля с другим.
-
 var fieldTime = document.querySelector('#time');
 var fieldTimeOut = document.querySelector('#timeout');
 var fieldRealtyType = document.querySelector('#type');
@@ -34,5 +30,7 @@ var capacityValues = ['3', '3', '0'];
 fieldCapacity.value = '0';
 
 window.synchronizeFields(fieldTime, fieldTimeOut, timeValues, timeOutValues, 'value');
+window.synchronizeFields(fieldTimeOut, fieldTime, timeOutValues, timeValues, 'value');
 window.synchronizeFields(fieldRealtyType, fieldPrice, realtyTypeValues, realtyPriceValues, 'min');
 window.synchronizeFields(fieldRoomNumber, fieldCapacity, roomNumberValues, capacityValues, 'value');
+window.synchronizeFields(fieldCapacity, fieldRoomNumber, capacityValues, roomNumberValues, 'value');
