@@ -6,7 +6,7 @@ window.initializePins = function () {
   var dialogClose = dialog.querySelector('.dialog__close');
 
   var pressEscBtn = function (evt) {
-    if (window.checkPressedEsc(evt)) {
+    if (window.checkEvents.checkPressedEsc(evt)) {
       hideDialog(evt);
     }
   };
@@ -44,7 +44,7 @@ window.initializePins = function () {
 
   pinMap.addEventListener('click', pressPin);
   pinMap.addEventListener('keydown', function (evt) {
-    if (window.checkPressedEnter(evt)) {
+    if (window.checkEvents.checkPressedEnter(evt)) {
       pressPin(evt);
     }
   });
@@ -58,7 +58,7 @@ window.initializePins = function () {
 
   dialogClose.addEventListener('click', hideDialog);
   dialogClose.addEventListener('keydown', function (evt) {
-    if (window.checkPressedEnter(evt)) {
+    if (window.checkEvents.checkPressedEnter(evt)) {
       hideDialog(evt);
     }
   });
