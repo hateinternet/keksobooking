@@ -54,9 +54,7 @@ window.initializePins = function () {
       activePin = element;
       element.setAttribute('aria-pressed', 'true');
       dialogClose.setAttribute('aria-pressed', 'false');
-      window.showCard(function () {
-        dialog.style.display = 'block';
-      });
+      window.showCard(dialog);
       document.addEventListener('keydown', pressEscBtn);
     }
   };

@@ -1,7 +1,8 @@
 'use strict';
 
-window.showCard = function (callback) {
-  if (typeof callback === 'function') {
-    callback();
-  }
+window.showCard = function (element) {
+  // if (typeof callback === 'function') {
+  //   callback();
+  // }
+  element.style.display = 'block';
 };
