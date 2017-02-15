@@ -29,7 +29,24 @@ window.initializePins = function () {
     }
   };
 
-  var pressPin = function (evt) {
+  var focusElement = null;
+
+  var returnFocus = function () {
+    activePin.focus();
+  };
+
+  var hideDialog = function (evt) {
+    if (typeof focusElement === 'function') {
+      focusElement();
+    }
+    deactivatePin();
+    dialogClose.setAttribute('aria-pressed', 'true');
+    dialog.style.display = 'none';
+    document.removeEventListener('keydown', pressEscBtn);
+  };
+
+  var pressPin = function (evt, callback) {
+    focusElement = callback;
     var element = evt.target.classList.contains('pin') ? evt.target : evt.target.parentElement;
     if (element !== activePin) {
       deactivatePin();
@@ -37,7 +54,9 @@ window.initializePins = function () {
       activePin = element;
       element.setAttribute('aria-pressed', 'true');
       dialogClose.setAttribute('aria-pressed', 'false');
-      dialog.style.display = 'block';
+      window.showCard(function () {
+        dialog.style.display = 'block';
+      });
       document.addEventListener('keydown', pressEscBtn);
     }
   };
@@ -45,16 +64,9 @@ window.initializePins = function () {
   pinMap.addEventListener('click', pressPin);
   pinMap.addEventListener('keydown', function (evt) {
     if (window.checkEvents.checkPressedEnter(evt)) {
-      pressPin(evt);
+      pressPin(evt, returnFocus);
     }
   });
-
-  var hideDialog = function (evt) {
-    deactivatePin();
-    dialogClose.setAttribute('aria-pressed', 'true');
-    dialog.style.display = 'none';
-    document.removeEventListener('keydown', pressEscBtn);
-  };
 
   dialogClose.addEventListener('click', hideDialog);
   dialogClose.addEventListener('keydown', function (evt) {
