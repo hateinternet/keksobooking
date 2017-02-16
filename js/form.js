@@ -30,15 +30,16 @@
 
   fieldCapacity.value = '0';
 
-  var synchLogic = function (firstElement, secondElement, firstArray, secondArray, property) {
-    firstElement.addEventListener('change', function () {
-      secondElement[property] = secondArray[firstArray.indexOf(firstElement['value'])];
-    });
+  var logicMin = function (firstElement, secondElement, firstArray, secondArray) {
+    secondElement['min'] = secondArray[firstArray.indexOf(firstElement['value'])];
+  };
+  var logicValue = function (firstElement, secondElement, firstArray, secondArray) {
+    secondElement['value'] = secondArray[firstArray.indexOf(firstElement['value'])];
   };
 
-  window.synchronizeFields(synchLogic(fieldTime, fieldTimeOut, timeValues, timeOutValues, 'value'));
-  window.synchronizeFields(synchLogic(fieldTimeOut, fieldTime, timeOutValues, timeValues, 'value'));
-  window.synchronizeFields(synchLogic(fieldRealtyType, fieldPrice, realtyTypeValues, realtyPriceValues, 'min'));
-  window.synchronizeFields(synchLogic(fieldRoomNumber, fieldCapacity, roomNumberValues, capacityValues, 'value'));
-  window.synchronizeFields(synchLogic(fieldCapacity, fieldRoomNumber, capacityValues, roomNumberValues, 'value'));
+  window.synchronizeFields(fieldTime, fieldTimeOut, timeValues, timeOutValues, logicValue);
+  window.synchronizeFields(fieldTimeOut, fieldTime, timeOutValues, timeValues, logicValue);
+  window.synchronizeFields(fieldRealtyType, fieldPrice, realtyTypeValues, realtyPriceValues, logicMin);
+  window.synchronizeFields(fieldRoomNumber, fieldCapacity, roomNumberValues, capacityValues, logicValue);
+  window.synchronizeFields(fieldCapacity, fieldRoomNumber, capacityValues, roomNumberValues, logicValue);
 })();
