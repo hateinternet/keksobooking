@@ -30,16 +30,13 @@
 
   fieldCapacity.value = '0';
 
-  var logicMin = function (firstElement, secondElement, firstArray, secondArray) {
-    secondElement['min'] = secondArray[firstArray.indexOf(firstElement['value'])];
-  };
-  var logicValue = function (firstElement, secondElement, firstArray, secondArray) {
-    secondElement['value'] = secondArray[firstArray.indexOf(firstElement['value'])];
+  var synchLogic = function (element, property, value) {
+    element[property] = value;
   };
 
-  window.synchronizeFields(fieldTime, fieldTimeOut, timeValues, timeOutValues, logicValue);
-  window.synchronizeFields(fieldTimeOut, fieldTime, timeOutValues, timeValues, logicValue);
-  window.synchronizeFields(fieldRealtyType, fieldPrice, realtyTypeValues, realtyPriceValues, logicMin);
-  window.synchronizeFields(fieldRoomNumber, fieldCapacity, roomNumberValues, capacityValues, logicValue);
-  window.synchronizeFields(fieldCapacity, fieldRoomNumber, capacityValues, roomNumberValues, logicValue);
+  window.synchronizeFields(fieldTime, fieldTimeOut, timeValues, timeOutValues, 'value', synchLogic);
+  window.synchronizeFields(fieldTimeOut, fieldTime, timeOutValues, timeValues, 'value', synchLogic);
+  window.synchronizeFields(fieldRealtyType, fieldPrice, realtyTypeValues, realtyPriceValues, 'min', synchLogic);
+  window.synchronizeFields(fieldRoomNumber, fieldCapacity, roomNumberValues, capacityValues, 'value', synchLogic);
+  window.synchronizeFields(fieldCapacity, fieldRoomNumber, capacityValues, roomNumberValues, 'value', synchLogic);
 })();

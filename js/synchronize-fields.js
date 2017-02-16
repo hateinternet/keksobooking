@@ -1,9 +1,9 @@
 'use strict';
 
-window.synchronizeFields = function (firstElement, secondElement, firstArray, secondArray, callback) {
+window.synchronizeFields = function (firstElement, secondElement, firstArray, secondArray, property, callback) {
   firstElement.addEventListener('change', function () {
     if (typeof callback === 'function') {
-      callback(firstElement, secondElement, firstArray, secondArray);
+      callback(secondElement, property, secondArray[firstArray.indexOf(firstElement['value'])]);
     }
   });
 };
