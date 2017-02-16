@@ -30,9 +30,17 @@
 
   fieldCapacity.value = '0';
 
-  window.synchronizeFields(fieldTime, fieldTimeOut, timeValues, timeOutValues, 'value');
-  window.synchronizeFields(fieldTimeOut, fieldTime, timeOutValues, timeValues, 'value');
-  window.synchronizeFields(fieldRealtyType, fieldPrice, realtyTypeValues, realtyPriceValues, 'min');
-  window.synchronizeFields(fieldRoomNumber, fieldCapacity, roomNumberValues, capacityValues, 'value');
-  window.synchronizeFields(fieldCapacity, fieldRoomNumber, capacityValues, roomNumberValues, 'value');
+  var synchValue = function (element, value) {
+    element['value'] = value;
+  };
+
+  var synchMin = function (element, value) {
+    element['min'] = value;
+  };
+
+  window.synchronizeFields(fieldTime, fieldTimeOut, timeValues, timeOutValues, synchValue);
+  window.synchronizeFields(fieldTimeOut, fieldTime, timeOutValues, timeValues, synchValue);
+  window.synchronizeFields(fieldRealtyType, fieldPrice, realtyTypeValues, realtyPriceValues, synchMin);
+  window.synchronizeFields(fieldRoomNumber, fieldCapacity, roomNumberValues, capacityValues, synchValue);
+  window.synchronizeFields(fieldCapacity, fieldRoomNumber, capacityValues, roomNumberValues, synchValue);
 })();
