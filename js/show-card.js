@@ -1,15 +1,16 @@
 'use strict';
 
-window.showCard = function (card, deactivatePin, focusElement) {
+window.showCard = (function () {
+  var card = document.querySelector('.dialog');
   var cardCloseBtn = card.querySelector('.dialog__close');
-  card.style.display = 'block';
+  var deactivatePin;
 
   var hideCard = function (evt) {
-    if (typeof focusElement === 'function') {
-      focusElement();
+    if (typeof deactivatePin === 'function') {
+      deactivatePin();
     }
-    deactivatePin();
     card.style.display = 'none';
+    card.setAttribute('aria-pressed', 'true');
     document.removeEventListener('keydown', pressEscBtn);
     cardCloseBtn.removeEventListener('click', hideCard);
     cardCloseBtn.removeEventListener('keydown', hideCardKeyboard);
@@ -27,7 +28,16 @@ window.showCard = function (card, deactivatePin, focusElement) {
     }
   };
 
-  document.addEventListener('keydown', pressEscBtn);
-  cardCloseBtn.addEventListener('click', hideCard);
-  cardCloseBtn.addEventListener('keydown', hideCardKeyboard);
-};
+  var showCard = function () {
+    card.style.display = 'block';
+    cardCloseBtn.setAttribute('aria-pressed', 'false');
+    document.addEventListener('keydown', pressEscBtn);
+    cardCloseBtn.addEventListener('click', hideCard);
+    cardCloseBtn.addEventListener('keydown', hideCardKeyboard);
+  };
+
+  return function (callbackDeactivate) {
+    showCard();
+    deactivatePin = callbackDeactivate;
+  };
+})();
