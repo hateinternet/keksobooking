@@ -34,7 +34,7 @@ window.initializePins = function () {
   pinMap.addEventListener('keydown', function (evt) {
     if (window.checkEvents.checkPressedEnter(evt)) {
       pressPin(evt);
-      window.showCard(function() {
+      window.showCard(function () {
         returnFocus();
         deactivatePin();
       });
