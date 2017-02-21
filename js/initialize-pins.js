@@ -1,16 +1,12 @@
-'use strict';
+ 'use strict';
 
 window.initializePins = function () {
   var pinMap = document.querySelector('.tokyo__pin-map');
   var activePin = null;
-  var focusElement = null;
 
   var deactivatePin = function () {
     if (activePin) {
       activePin.setAttribute('aria-pressed', 'false');
-      if (typeof focusElement === 'function') {
-        focusElement();
-      }
       activePin.classList.remove('pin--active');
       activePin = null;
     }
@@ -20,22 +16,28 @@ window.initializePins = function () {
     activePin.focus();
   };
 
-  var pressPin = function (evt, focus) {
-    focusElement = focus;
+  var pressPin = function (evt) {
     var element = evt.target.classList.contains('pin') ? evt.target : evt.target.parentElement;
     if (element !== activePin) {
-      deactivatePin(focus);
+      deactivatePin();
       element.classList.add('pin--active');
       activePin = element;
       element.setAttribute('aria-pressed', 'true');
-      window.showCard(deactivatePin);
     }
   };
 
-  pinMap.addEventListener('click', pressPin);
+  pinMap.addEventListener('click', function (evt) {
+    pressPin(evt);
+    window.showCard(deactivatePin);
+  });
+
   pinMap.addEventListener('keydown', function (evt) {
     if (window.checkEvents.checkPressedEnter(evt)) {
-      pressPin(evt, returnFocus);
+      pressPin(evt);
+      window.showCard(function() {
+        returnFocus();
+        deactivatePin();
+      });
     }
   });
 };
