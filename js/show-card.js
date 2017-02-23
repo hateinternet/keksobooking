@@ -5,6 +5,8 @@ window.showCard = (function () {
   var cardCloseBtn = card.querySelector('.dialog__close');
   var deactivatePin;
   var cardData;
+  var newPhoto;
+  var newFeature;
 
   var cardAvatar = card.querySelector('.dialog__title > img');
   var cardDescription = card.querySelector('.dialog__panel');
@@ -15,6 +17,8 @@ window.showCard = (function () {
   var lodgeRoomsGuests = cardDescription.querySelector('.lodge__rooms-and-guests');
   var lodgeCheckinTime = cardDescription.querySelector('.lodge__checkin-time');
   var lodgeDescription = cardDescription.querySelector('.lodge__description');
+  var lodgePhotos = cardDescription.querySelector('.lodge__photos');
+  var lodgeFeatures = cardDescription.querySelector('.lodge__features');
 
   var hideCard = function (evt) {
     if (typeof deactivatePin === 'function') {
@@ -66,6 +70,24 @@ window.showCard = (function () {
     lodgeRoomsGuests.innerHTML = cardData.offer.rooms + ' комнат для ' + cardData.offer.guests + ' гостей';
     lodgeCheckinTime.innerHTML = 'Заезд после ' + cardData.offer.checkin + ', выезд до ' + cardData.offer.checkout;
     lodgeDescription.innerHTML = cardData.offer.description;
+
+    lodgePhotos.innerHTML = '';
+    for (var i = 0; i < cardData.offer.photos.length; i++) {
+      newPhoto = document.createElement('img');
+      newPhoto.src = cardData.offer.photos[i];
+      newPhoto.alt = 'Lodge photos';
+      newPhoto.width = '52';
+      newPhoto.height = '42';
+      lodgePhotos.appendChild(newPhoto);
+    }
+
+    lodgeFeatures.innerHTML = '';
+    for (var j = 0; j < cardData.offer.features.length; j++) {
+      newFeature = document.createElement('span');
+      newFeature.classList.add('feature__image');
+      newFeature.classList.add('feature__image--' + cardData.offer.features[j]);
+      lodgeFeatures.appendChild(newFeature);
+    }
   };
 
   return function (data, callbackDeactivate) {
