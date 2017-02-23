@@ -9,7 +9,6 @@ window.renderPin = function (data) {
   newPin.style.left = data.location.x + 'px';
   newPin.style.top = data.location.y + 'px';
   newPin.setAttribute('tabindex', '1');
-  newPin.data = data;
   newPinAvatar.src = data.author.avatar;
   newPinAvatar.alt = 'User avatar';
   return newPin;

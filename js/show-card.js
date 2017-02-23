@@ -5,6 +5,7 @@ window.showCard = (function () {
   var cardCloseBtn = card.querySelector('.dialog__close');
   var deactivatePin;
   var cardData;
+  var photoLink;
   var newPhoto;
   var newFeature;
 
@@ -72,17 +73,23 @@ window.showCard = (function () {
     lodgeDescription.innerHTML = cardData.offer.description;
 
     lodgePhotos.innerHTML = '';
-    for (var i = 0; i < cardData.offer.photos.length; i++) {
+    var countOfPhotos = cardData.offer.photos.length;
+    for (var i = 0; i < countOfPhotos; i++) {
+      var link = cardData.offer.photos[i];
+      photoLink = document.createElement('a');
       newPhoto = document.createElement('img');
-      newPhoto.src = cardData.offer.photos[i];
+      photoLink.href = link;
+      newPhoto.src = link;
       newPhoto.alt = 'Lodge photos';
       newPhoto.width = '52';
       newPhoto.height = '42';
-      lodgePhotos.appendChild(newPhoto);
+      photoLink.appendChild(newPhoto);
+      lodgePhotos.appendChild(photoLink);
     }
 
     lodgeFeatures.innerHTML = '';
-    for (var j = 0; j < cardData.offer.features.length; j++) {
+    var countOfFeatures = cardData.offer.features.length;
+    for (var j = 0; j < countOfFeatures; j++) {
       newFeature = document.createElement('span');
       newFeature.classList.add('feature__image');
       newFeature.classList.add('feature__image--' + cardData.offer.features[j]);

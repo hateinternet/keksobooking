@@ -3,7 +3,6 @@
 window.initializePins = function () {
   var pinMap = document.querySelector('.tokyo__pin-map');
   var activePin = null;
-  var pins = [];
   var newPin;
   var similarApartments = [];
   var randomAppartments = [];
@@ -28,10 +27,10 @@ window.initializePins = function () {
   var getApartments = function (data) {
     similarApartments = data;
     randomAppartments = window.utils.getSetOfRandomElements(similarApartments, 3);
-    for (var i = 0; i < randomAppartments.length; i++) {
+    var countOfAppartments = randomAppartments.length;
+    for (var i = 0; i < countOfAppartments; i++) {
       newPin = window.renderPin(randomAppartments[i]);
       pinMap.appendChild(newPin);
-      pins.push(newPin);
       addHandlersPin(newPin, randomAppartments[i]);
     }
   };
