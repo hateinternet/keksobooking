@@ -17,7 +17,7 @@ window.initializePins = function () {
     pin.addEventListener('keydown', function (evt) {
       if (window.checkEvents.checkPressedEnter(evt)) {
         pressPin(evt);
-        window.showCard(activePin.data, function () {
+        window.showCard(pinData, function () {
           returnFocus();
           deactivatePin();
         });
