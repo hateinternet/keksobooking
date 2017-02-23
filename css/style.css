@@ -503,6 +503,7 @@ select option:hover {
 
     width: 230px;
     height: 510px;
+    display: none;
 }
 
 .dialog__title {
