@@ -25,7 +25,8 @@ window.utils = (function () {
     },
     changeIdToClass: function (array) {
       var value;
-      for (var i = 0; i < array.length; i++) {
+      var countOfArray = array.length;
+      for (var i = 0; i < countOfArray; i++) {
         value = array[i].getAttribute('id');
         array[i].classList.add(value);
         array[i].removeAttribute('id');
