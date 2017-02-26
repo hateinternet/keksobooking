@@ -3,35 +3,103 @@
 window.initializePins = function () {
   var pinMap = document.querySelector('.tokyo__pin-map');
   var activePin = null;
-  var newPin;
+  var pins = [];
+  var addedPin;
   var similarApartments = [];
-  var randomAppartments = [];
+  var filteredApartments = [];
   var URL_DATA = 'https://intensive-javascript-server-pedmyactpq.now.sh/keksobooking/data';
+  var ALL_VALUES = 'any';
+  var FIRST_PRICE_LIMIT = 10000;
+  var SECOND_PRICE_LIMIT = 50000;
+
+  var card = document.querySelector('.dialog');
+  var allFilters = document.querySelector('.tokyo__filters');
+  var filterType = document.querySelector('#housing_type');
+  var filterPrice = document.querySelector('#housing_price');
+  var filterRooms = document.querySelector('#housing_room-number');
+  var filterGuests = document.querySelector('#housing_guests-number');
+  var features = document.querySelectorAll('#housing_features input');
+
+  var clearMap = function () {
+    pins.forEach(function (element) {
+      pinMap.removeChild(element);
+    });
+    pins = [];
+  };
 
   var addHandlersPin = function (pin, pinData) {
     pin.addEventListener('click', function (evt) {
-      pressPin(evt);
+      onPinPressed(evt);
       window.showCard(pinData, deactivatePin);
     });
     pin.addEventListener('keydown', function (evt) {
       if (window.checkEvents.checkPressedEnter(evt)) {
-        pressPin(evt);
+        onPinPressed(evt);
         window.showCard(pinData, function () {
-          returnFocus();
+          setFocus();
           deactivatePin();
         });
       }
     });
   };
 
+  var renderPin = function (data) {
+    var templateElement = document.querySelector('#pin-template');
+    var pinToClone = templateElement.content.querySelector('.pin');
+    var newPin = pinToClone.cloneNode(true);
+    var newPinAvatar = newPin.querySelector('img');
+
+    newPin.style.left = data.location.x + 'px';
+    newPin.style.top = data.location.y + 'px';
+    newPin.setAttribute('tabindex', '1');
+    newPinAvatar.src = data.author.avatar;
+    newPinAvatar.alt = 'User avatar';
+    addHandlersPin(newPin, data);
+    return newPin;
+  };
+
   var getApartments = function (data) {
     similarApartments = data;
-    randomAppartments = window.utils.getSetOfRandomElements(similarApartments, 3);
-    var countOfAppartments = randomAppartments.length;
-    for (var i = 0; i < countOfAppartments; i++) {
-      newPin = window.renderPin(randomAppartments[i]);
-      pinMap.appendChild(newPin);
-      addHandlersPin(newPin, randomAppartments[i]);
+    applyFilter();
+  };
+
+  var applyFilter = function () {
+    card.style.display = 'none';
+    filteredApartments = [];
+    filteredApartments = similarApartments.filter(function (element) {
+      return filterType.value === ALL_VALUES || element.offer.type === filterType.value;
+    });
+    filteredApartments = filteredApartments.filter(function (element) {
+      switch (filterPrice.value) {
+        case 'middle':
+          return element.offer.price >= FIRST_PRICE_LIMIT && element.offer.price < SECOND_PRICE_LIMIT;
+        case 'low':
+          return element.offer.price < FIRST_PRICE_LIMIT;
+        case 'high':
+          return element.offer.price >= SECOND_PRICE_LIMIT;
+      }
+      return true;
+    });
+    filteredApartments = filteredApartments.filter(function (element) {
+      return filterRooms.value === ALL_VALUES || element.offer.rooms.toString() === filterRooms.value;
+    });
+    filteredApartments = filteredApartments.filter(function (element) {
+      return filterGuests.value === ALL_VALUES || element.offer.guests.toString() === filterGuests.value;
+    });
+    features.forEach(function (feature) {
+      if (feature.checked) {
+        filteredApartments = filteredApartments.filter(function (element) {
+          return element.offer.features.indexOf(feature.value) >= 0;
+        });
+      }
+    });
+
+    clearMap();
+    var countOfAppartments = filteredApartments.length;
+    for (var j = 0; j < countOfAppartments; j++) {
+      addedPin = renderPin(filteredApartments[j]);
+      pins.push(addedPin);
+      pinMap.appendChild(addedPin);
     }
   };
 
@@ -43,11 +111,11 @@ window.initializePins = function () {
     }
   };
 
-  var returnFocus = function () {
+  var setFocus = function () {
     activePin.focus();
   };
 
-  var pressPin = function (evt) {
+  var onPinPressed = function (evt) {
     var element = evt.target.classList.contains('pin') ? evt.target : evt.target.parentElement;
     if (element !== activePin) {
       deactivatePin();
@@ -56,6 +124,8 @@ window.initializePins = function () {
       element.setAttribute('aria-pressed', 'true');
     }
   };
+
+  allFilters.addEventListener('change', applyFilter);
 
   window.load(URL_DATA, getApartments);
 };
