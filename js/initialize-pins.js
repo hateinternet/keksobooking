@@ -1,6 +1,6 @@
 'use strict';
 
-window.initializePins = function () {
+window.initializePins = (function () {
   var pinMap = document.querySelector('.tokyo__pin-map');
   var activePin = null;
   var pins = [];
@@ -11,6 +11,8 @@ window.initializePins = function () {
   var ALL_VALUES = 'any';
   var FIRST_PRICE_LIMIT = 10000;
   var SECOND_PRICE_LIMIT = 50000;
+  var HALF_WIDTH_PIN = 28;
+  var HALF_HEIGHT_PIN = 37.5;
 
   var card = document.querySelector('.dialog');
   var allFilters = document.querySelector('.tokyo__filters');
@@ -49,8 +51,8 @@ window.initializePins = function () {
     var newPin = pinToClone.cloneNode(true);
     var newPinAvatar = newPin.querySelector('img');
 
-    newPin.style.left = data.location.x + 'px';
-    newPin.style.top = data.location.y + 'px';
+    newPin.style.left = data.location.x - HALF_WIDTH_PIN + 'px';
+    newPin.style.top = data.location.y - HALF_HEIGHT_PIN + 'px';
     newPin.setAttribute('tabindex', '1');
     newPinAvatar.src = data.author.avatar;
     newPinAvatar.alt = 'User avatar';
@@ -104,7 +106,7 @@ window.initializePins = function () {
   };
 
   var deactivatePin = function () {
-    if (activePin) {
+    if (activePin !== null) {
       activePin.setAttribute('aria-pressed', 'false');
       activePin.classList.remove('pin--active');
       activePin = null;
@@ -124,8 +126,8 @@ window.initializePins = function () {
       element.setAttribute('aria-pressed', 'true');
     }
   };
-
   allFilters.addEventListener('change', applyFilter);
-
-  window.load(URL_DATA, getApartments);
-};
+  return function () {
+    window.load(URL_DATA, getApartments);
+  };
+})();
