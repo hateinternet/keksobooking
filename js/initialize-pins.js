@@ -12,7 +12,7 @@ window.initializePins = (function () {
   var FIRST_PRICE_LIMIT = 10000;
   var SECOND_PRICE_LIMIT = 50000;
   var HALF_WIDTH_PIN = 28;
-  var HALF_HEIGHT_PIN = 37.5;
+  var HEIGHT_PIN = 75;
 
   var card = document.querySelector('.dialog');
   var allFilters = document.querySelector('.tokyo__filters');
@@ -52,7 +52,7 @@ window.initializePins = (function () {
     var newPinAvatar = newPin.querySelector('img');
 
     newPin.style.left = data.location.x - HALF_WIDTH_PIN + 'px';
-    newPin.style.top = data.location.y - HALF_HEIGHT_PIN + 'px';
+    newPin.style.top = data.location.y - HEIGHT_PIN + 'px';
     newPin.setAttribute('tabindex', '1');
     newPinAvatar.src = data.author.avatar;
     newPinAvatar.alt = 'User avatar';
