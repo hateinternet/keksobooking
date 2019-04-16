@@ -7,7 +7,7 @@ window.initializePins = (function () {
   var addedPin;
   var similarApartments = [];
   var filteredApartments = [];
-  var URL_DATA = 'https://intensive-javascript-server-pedmyactpq.now.sh/keksobooking/data';
+  var URL_DATA = 'https://js.dump.academy/keksobooking/data';
   var ALL_VALUES = 'any';
   var FIRST_PRICE_LIMIT = 10000;
   var SECOND_PRICE_LIMIT = 50000;
